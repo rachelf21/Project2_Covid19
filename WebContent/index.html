@@ -1,0 +1,78 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Covid19 50 States Tracker</title>
+<link rel="stylesheet" type="text/css" href="css/styles.css">
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Roboto|Ubuntu">
+</head>
+
+
+<body>
+
+	<div class="container">
+		<h1>Track Covid19 Cases in the United States</h1>
+		<h4>Select a state, starting date, ending date to view the
+			Covid19 cases, hospitalizations and deaths in that state.</h4>
+		
+		<div style="margin: auto; width: 300px">
+			<img id="logo" width=300
+				src="http://localhost:8080/Covid19/images/covid_map.png">
+		</div>
+
+		<form action="ResultControllerServlet" method="GET">
+			<input type="hidden" name="command" value="CREATE">
+
+			<div class="row">
+				<div class="col-25">
+					<label for="criteria">State</label>
+				</div>
+				<div class="col-75">
+					<select id="criteria" name="state">
+						<option value="ca">CA</option>
+						<option value="de">DE</option>
+						<option value="me">ME</option>
+						<option value="nj">NJ</option>
+						<option value="ny">NY</option>
+						<option value="wa">WA</option>
+					</select>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-25">
+					<label for="start">Starting Date</label>
+				</div>
+				<div class="col-75">
+					<input type="date" id="start" name="start_date">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-25">
+					<label for="end">Ending Date</label>
+				</div>
+				<div class="col-75">
+					<input type="date" id="end" name="end_date">
+				</div>
+
+			</div>
+			<p>
+			<div class="row">
+				<input type="submit" value="View State Data">
+			</div>
+		</form>
+	</div>
+</body>
+<footer style="display: block;">
+	<h5>Created by Rachel Friedman for CISC 4800 | Project 2 | April
+		2020</h5>
+</footer>
+<script>
+	let today = new Date().toISOString().substr(0, 10);
+	document.querySelector("#start").value = "2020-04-01";
+	document.querySelector("#end").value = today;
+</script>
+</html>
