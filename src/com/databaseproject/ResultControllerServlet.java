@@ -36,15 +36,13 @@ public class ResultControllerServlet extends HttpServlet {
 
 	private ResultDbUtil resultDbUtil;
 
-	// Resource(name = "jdbc/covid") //for tomcat server
+	//@Resource(name = "jdbc/covid2") // for local tomcat server
 	@Resource(name = "jdbc/postgres") // for amazon server
 	// driverClassName="org.postgresql.ds.PGPoolingDataSource" /for amazon server
 
 	private DataSource dataSource;
 	String address = "https://covidtracking.com/api/v1/states/daily.csv";
 	String tableWithLatestData = "coviddata3";
-	// String path = "C:\\Users\\Rachel\\eclipse-workspace\\Covid19\\data\\";
-	// String filename = path + "data.csv";
 
 	@Override
 	public void init() throws ServletException {
@@ -71,9 +69,7 @@ public class ResultControllerServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-
 			String theCommand = request.getParameter("command");
-
 			if (theCommand == null) {
 				theCommand = "LIST_STATES";
 			}
@@ -82,9 +78,6 @@ public class ResultControllerServlet extends HttpServlet {
 
 			case "LIST_STATES":
 				createStates(request, response);
-//				request.setAttribute("STATES_LIST", states);
-//				RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
-//				dispatcher.forward(request, response);
 				downloadData(request, response);
 				break;
 
@@ -93,8 +86,6 @@ public class ResultControllerServlet extends HttpServlet {
 				break;
 
 			case "LIST":
-				// list results in MVC fashion
-				// get data, set attribute, use request dispatcher and send it to jsp page
 				listResults(request, response);
 				break;
 
@@ -114,6 +105,14 @@ public class ResultControllerServlet extends HttpServlet {
 				deleteResult(request, response);
 				break;
 
+			case "RESET":
+				resetIndex(request, response);
+				break;
+
+			case "EXIT":
+				exitProgram(request, response);
+				break;
+
 			default:
 				listResults(request, response);
 			}
@@ -123,8 +122,52 @@ public class ResultControllerServlet extends HttpServlet {
 		}
 	}
 
-	// downloads data and creates 3 tables based on the data. Includes all states
-	// and dates
+	/**
+	 * Sends user back to the Index page to allow user to select different state,
+	 * starting date, and ending date
+	 * 
+	 * @param request information sent to servlet
+	 * @param response information returned from servlet
+	 * @throws ServletException when a servlet error occurs
+	 * @throws IOException when the connection stream is interrupted
+	 */
+	private void resetIndex(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		LinkedHashMap<String, String> states = resultDbUtil.getListOfStates();
+		request.setAttribute("STATES_ABBR_LIST", states);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+		dispatcher.forward(request, response);
+	}
+
+	/**
+	 * Closes the database connection and exits the program. This method is called
+	 * when the user clicks on the Exit button.
+	 * 
+	 * @param request information sent to servlet
+	 * @param response information returned from servlet
+	 * @throws ServletException when a servlet error occurs
+	 * @throws IOException when the connection stream is interrupted
+	 * @throws SQLException when a database error occurs
+	 */
+	private void exitProgram(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, SQLException {
+		resultDbUtil.exit();
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/start.jsp");
+		dispatcher.forward(request, response);
+	}
+
+	/**
+	 * Downloads the data from covidtracking.com and creates 3 tables (positive
+	 * cases, hospitalizations, deaths) based on the data. Each table includes all
+	 * states and all dates. This method is called when the user clicks on "Click to
+	 * Launch" on the starting page (start.jsp)
+	 * 
+	 * @param request information sent to servlet
+	 * @param response information returned from servlet
+	 * @throws ServletException when a servlet error occurs
+	 * @throws IOException when the connection stream is interrupted
+	 * @throws SQLException when a database error occurs
+	 */
 	private void downloadData(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, SQLException {
 		WebScraper ws = new WebScraper();
@@ -134,13 +177,14 @@ public class ResultControllerServlet extends HttpServlet {
 		String filename = path + "data.csv";
 		System.out.println("filename = " + filename);
 		String columns = ws.saveToFile(filename, content);
+		Connection conn = null;
+		PGConnection pgConnection = null;
 
 		try {
 			Database db = new Database();
-			Connection conn = null;
 			conn = dataSource.getConnection();
 			db.convertToTable(conn, tableWithLatestData, columns);
-			PGConnection pgConnection = conn.unwrap(PGConnection.class);
+			pgConnection = conn.unwrap(PGConnection.class);
 			db.addRecords(pgConnection, filename, tableWithLatestData);
 
 			db.createTable(conn, tableWithLatestData, "positive", "date, state, positive");
@@ -152,35 +196,40 @@ public class ResultControllerServlet extends HttpServlet {
 			System.err.println("CREATE CLAUSE");
 			e.printStackTrace();
 		}
+
+		finally {
+			if (conn != null)
+				conn.close();
+			if (pgConnection != null)
+				((Connection) pgConnection).close();
+		}
 	}
 
+	/**
+	 * Creates a table for fifty states with abbreviations for each. This table is
+	 * then used to populate the State dropdown list on the index page. This method
+	 * is called when the user clicks on "Click to Launch"
+	 * 
+	 * @param request information sent to servlet
+	 * @param response information returned from servlet
+	 * @throws ServletException when a servlet error occurs
+	 * @throws IOException when the connection stream is interrupted
+	 * @throws SQLException when a database error occurs
+	 */
 	private void createStates(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, SQLException {
-		// get results from resultsdbutil
-
-//		ServletContext context = request.getServletContext();
-//		WebScraper ws = new WebScraper();
-//		byte[] content = ws.retrieveDataFromWebsite(address);
-//		// String path = "C:\\Users\\Rachel\\eclipse-workspace\\Covid19\\data\\";
-//		String path = context.getRealPath("/");
-//		System.out.println("getRealPath = " + path);
-//
-//		String filename = path + "data.csv";
-//		String columns = ws.saveToFile(filename, content);
-//		System.out.println("Columns: " + columns);
-
-		// create state lists. remove everything on top if this doesnt work
 
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
+		PGConnection pgConnection = null;
 
 		try {
 			conn = null;
 			stmt = null;
 			rs = null;
 			conn = dataSource.getConnection();
-			PGConnection pgConnection = conn.unwrap(PGConnection.class);
+			pgConnection = conn.unwrap(PGConnection.class);
 
 			ServletContext context = request.getServletContext();
 			String path = context.getRealPath("/");
@@ -190,11 +239,8 @@ public class ResultControllerServlet extends HttpServlet {
 		}
 		finally {
 			LinkedHashMap<String, String> states = resultDbUtil.getListOfStates();
-
 			// add results to the request
 			request.setAttribute("STATES_ABBR_LIST", states);
-
-			// send to JSP page (view)
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
 			dispatcher.forward(request, response);
 			if (stmt != null)
@@ -203,9 +249,18 @@ public class ResultControllerServlet extends HttpServlet {
 				rs.close();
 			if (conn != null)
 				conn.close();
+			if (pgConnection != null)
+				((Connection) pgConnection).close();
 		}
 	}
 
+	/**
+	 * This method has been replaced by createTable2 in this version of the program.
+	 * 
+	 * @param request information sent to servlet
+	 * @param response information returned from servlet
+	 * @throws Exception when an error occurs
+	 */
 	private void createTable(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String mmddB = request.getParameter("start_date");
 		mmddB = mmddB.substring(5);
@@ -224,7 +279,7 @@ public class ResultControllerServlet extends HttpServlet {
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
-		
+
 		try {
 			stmt = null;
 			rs = null;
@@ -258,8 +313,15 @@ public class ResultControllerServlet extends HttpServlet {
 		}
 	}
 
-	// replaced the createTable which I will delete eventually. This one put the
-	// download into a separate method
+	/**
+	 * Creates the Results table based on the user selection of state, start date,
+	 * and end date. This method is called when the user clicks on "View State
+	 * Data".
+	 * 
+	 * @param request information sent to servlet
+	 * @param response information returned from servlet
+	 * @throws Exception when an error occurs
+	 */
 	private void createTable2(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String mmddB = request.getParameter("start_date");
 		mmddB = mmddB.substring(5);
@@ -277,10 +339,9 @@ public class ResultControllerServlet extends HttpServlet {
 			db.deleteOldRecords(conn, "results", mmddB);
 			db.deleteRecordsAfter(conn, "results", mmddA);
 			listResults(request, response);
-
 		}
 		catch (Exception e) {
-			System.err.println("CREATE CLAUSE");
+			System.err.println("CREATE ERROR");
 			e.printStackTrace();
 		}
 		finally {
@@ -289,12 +350,28 @@ public class ResultControllerServlet extends HttpServlet {
 		}
 	}
 
-	private void deleteResult(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	/**
+	 * Deletes the Result record identified by the ID. This method is called when
+	 * the user clicks on "Delete"
+	 * 
+	 * @param request information sent to servlet
+	 * @param response information returned from servlet
+	 * @throws Exception when an error occurs
+	 */
+	public void deleteResult(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		int id = Integer.parseInt(request.getParameter("resultID"));
 		resultDbUtil.deleteResult(id);
 		listResults(request, response);
 	}
 
+	/**
+	 * Updates the Result record identified by the ID. This method is called when
+	 * the user clicks on "Save" on the Update form.
+	 * 
+	 * @param request information sent to servlet
+	 * @param response information returned from servlet
+	 * @throws Exception when an error occurs
+	 */
 	private void updateResult(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		try {
@@ -334,26 +411,32 @@ public class ResultControllerServlet extends HttpServlet {
 		}
 	}
 
+	/**
+	 * Loads the record to be updated into the Update Form. This method is called
+	 * when the user clicks on "Edit"
+	 * 
+	 * @param request information sent to servlet
+	 * @param response information returned from servlet
+	 * @throws Exception when an error occurs
+	 */
 	private void loadResult(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		// read resultid from form data
 		String id = request.getParameter("resultID");
-
-		// get result from dbutil
 		Result result = resultDbUtil.getResult(id);
-
-		// place request in request attribute
 		request.setAttribute("THE_RESULT", result);
-
-		// send to jsp page: update-Result
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/update-entry-form2.jsp");
 		dispatcher.forward(request, response);
 	}
 
+	/**
+	 * Adds a new Result object (record entry) to the Results table in the database.
+	 * This method is called when the user clicks on Save on the "Add Entry" form.
+	 * 
+	 * @param request information sent to servlet
+	 * @param response information returned from servlet
+	 * @throws Exception when an error occurs
+	 */
 	private void addResult(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
 		try {
-			// read Result info from form data
 			String dateString = request.getParameter("date");
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 			Date date = new Date();
@@ -368,13 +451,8 @@ public class ResultControllerServlet extends HttpServlet {
 			int pos = Integer.parseInt(request.getParameter("positive"));
 			int hosp = Integer.parseInt(request.getParameter("hosp"));
 			int death = Integer.parseInt(request.getParameter("death"));
-
-			// create a new result object
 			Result result = new Result(sqlDate, state, pos, hosp, death);
-
-			// add the Result to the database
 			resultDbUtil.addResult(result);
-			// send back to main page (the list)
 			listResults(request, response);
 		}
 		catch (NumberFormatException e) {
@@ -382,21 +460,20 @@ public class ResultControllerServlet extends HttpServlet {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
 			dispatcher.forward(request, response);
 		}
-		finally {
-			// send back to main page (the list)
-			// listResults(request, response);
-		}
 	}
 
+	/**
+	 * Generates a list of results based on user selection of state, start date, and
+	 * end date. This method is called (indirectly) after user clicks on View State Data, after
+	 * the tables are created and also when user clicks on "Back to List".
+	 * 
+	 * @param request information sent to servlet
+	 * @param response information returned from servlet
+	 * @throws Exception when an error occurs
+	 */
 	private void listResults(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		// get results from resultsdbutil
 		List<Result> results = resultDbUtil.getResults();
-
-		// add results to the request
 		request.setAttribute("RESULT_LIST", results);
-
-		// send to JSP page (view)
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/list-results.jsp");
 		dispatcher.forward(request, response);
 

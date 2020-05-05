@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"com.databaseproject","l":"Database"},{"p":"com.databaseproject","l":"Result"},{"p":"com.databaseproject","l":"ResultControllerServlet"},{"p":"com.databaseproject","l":"ResultDbUtil"},{"p":"com.databaseproject","l":"WebScraper"}]

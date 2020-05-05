@@ -28,13 +28,7 @@
 		 <div style="margin: auto; width: 50%; font-size:medium; text-align:center; line-height: 1.6">
 		 
 		 Launching this app will retrieve the data from <a href="https://covidtracking.com/"
-				target="_blank">covidtracking.com</a> and build a database out of that data. 
-				The purpose of this app is for the user to be able to customize the data retrieved from <a href="https://covidtracking.com/"
-				target="_blank">covidtracking.com</a>, since there are many different data sources with different information available. 
-				This app will allow the user to load initial data from <a href="https://covidtracking.com/"
-				target="_blank">covidtracking.com</a>, and then  
-				customize that data, by filtering based on state and date,  
-				adding additional information, editing existing information and deleting information. 
+				target="_blank">covidtracking.com</a> and create tables from that data. 
 				</div>
 				
 </body>

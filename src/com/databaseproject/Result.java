@@ -1,8 +1,13 @@
 package com.databaseproject;
 
 import java.util.Date;
-
+/**
+ * This class represents the results returned by the database query
+ * @author Rachel Friedman
+ *
+ */
 public class Result {
+	
 	private int id;
 	private java.sql.Date date;
 	private String state;
@@ -10,6 +15,14 @@ public class Result {
 	private int hospitalizations;
 	private int death;
 
+	/**
+	 * Creates a Result object. Each Result object represents one record returned by the database query.
+	 * @param date date of report
+	 * @param state state of report
+	 * @param positive number of positive cases reported in selected state on given day
+	 * @param hospitalizations number of hospitalizations reported in selected state on given day
+	 * @param death number of deaths reported in selected state on given day
+	 */
 	public Result(Date date, String state, int positive, int hospitalizations, int death) {
 		this.date = (java.sql.Date) date;
 		this.state = state;
@@ -18,6 +31,15 @@ public class Result {
 		this.death = death;
 	}
 
+	/**
+	 * Creates a Result object with a specified ID. Each Result object represents one record returned by the database query.
+	 * @param id the ID (primary key) of the Result object (database record)
+	 * @param date date of report
+	 * @param state state of report
+	 * @param positive number of positive cases reported in selected state on given day
+	 * @param hospitalizations number of hospitalizations reported in selected state on given day
+	 * @param death number of deaths reported in selected state on given day
+	 */
 	public Result(int id, Date date, String state, int positive, int hospitalizations, int death) {
 		this.id = id;
 		this.date = (java.sql.Date) date;

@@ -3,6 +3,7 @@ package com.databaseproject;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,12 +11,23 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.sql.DataSource;
 
+/**
+ * This is a helper class for Result, which is the Model in the MVC.  This class is used by ResultControllerServlet to interact with the Result class.
+ * @author Rachel Friedman
+ *
+ */
 public class ResultDbUtil {
 
 	private DataSource dataSource;
-
+	Database db = new Database();
+	
+	/**
+	 * contructs a ResluldDbUtil object which acts as the go-between between Result and the ResultControllerServlet
+	 * @param theDataSource is used to get a connection to the database
+	 */
 	public ResultDbUtil(DataSource theDataSource) {
 		dataSource = theDataSource;
 //		try {
@@ -26,6 +38,11 @@ public class ResultDbUtil {
 //		}
 	}
 
+	/**
+	 * Generates a list of Result objects, where each Result object represents one record in the database returned by the database query
+	 * @return a a list of Result objects, where each Result object represents one record in the database returned by the database query
+	 * @throws Exception when an error occurs
+	 */
 	public List<Result> getResults() throws Exception {
 
 		List<Result> results = new ArrayList<Result>();
@@ -74,30 +91,16 @@ public class ResultDbUtil {
 		}
 		return results;
 	}
-
-	private void close(Connection myConn, Statement myStmt, ResultSet myRs) {
-		try {
-			if (myRs != null) {
-				myRs.close();
-			}
-			if (myStmt != null) {
-				myStmt.close();
-			}
-			if (myConn != null) {
-				myConn.close();
-			}
-		}
-		catch (Exception e) {
-			System.err
-					.println("close " + e.getStackTrace()[0].getMethodName() + e.getClass().getName() + e.getMessage());
-		}
-
-	}
+		
+	/**
+	 * Updates the table by adding a new Result object (which is one record) into the table
+	 * @param result represents the new record to be added to the database
+	 * @throws Exception when an error occurs
+	 */
 
 	public void addResult(Result result) throws Exception {
 		Connection myConn = null;
 		PreparedStatement myStmt = null;
-		ResultSet myRs = null;
 
 		try {
 			// create sql for insert
@@ -118,10 +121,16 @@ public class ResultDbUtil {
 
 		}
 		finally {// clean up JDBC
-			close(myConn, myStmt, null);
+			close(myConn, null, null);
 		}
 	}
 
+	/**
+	 * Retrieves a record based on ID 
+	 * @param id the ID used to identify the record being retrieved
+	 * @return Result object, which is a single record in the database
+	 * @throws Exception when an error occurs
+	 */
 	public Result getResult(String id) throws Exception {
 		Result result = null;
 
@@ -131,7 +140,6 @@ public class ResultDbUtil {
 		int resultId = Integer.parseInt(id);
 
 		try {
-			// convert Result to int
 			// get connection to database
 			myConn = dataSource.getConnection();
 
@@ -164,11 +172,15 @@ public class ResultDbUtil {
 			return result;
 		}
 		finally {
-			// close connections
 			close(myConn, myStmt, myRs);
 		}
 	}
 
+	/**
+	 * Updates a result object (record) 
+	 * @param theResult the newly updated result (record)
+	 * @throws Exception when an error occurs
+	 */
 	public void updateResult(Result theResult) throws Exception {
 
 		Connection myConn = null;
@@ -203,6 +215,11 @@ public class ResultDbUtil {
 		}
 	}
 
+	/**
+	 * Deletes the result object (record) based on ID
+	 * @param id the ID of the result (record) to be deleted
+	 * @throws Exception when an error occurs
+	 */
 	public void deleteResult(int id) throws Exception {
 		Connection myConn = null;
 		PreparedStatement myStmt = null;
@@ -222,7 +239,6 @@ public class ResultDbUtil {
 			myStmt.setInt(1, id);
 
 			// execute statement to perform update on database
-
 			myStmt.execute();
 		}
 
@@ -233,6 +249,49 @@ public class ResultDbUtil {
 
 	}
 
+	private void close(Connection myConn, Statement myStmt, ResultSet myRs) {
+		try {
+			if (myRs != null) {
+				myRs.close();
+			}
+			if (myStmt != null) {
+				myStmt.close();
+			}
+			if (myConn != null) {
+				myConn.close();
+			}
+		}
+		catch (Exception e) {
+			System.err
+					.println("close " + e.getStackTrace()[0].getMethodName() + e.getClass().getName() + e.getMessage());
+		}
+
+	}
+
+	/*
+	 * Closes connection to database
+	 * @throws SQLException when a database error occurs
+	 */
+	public void exit() throws SQLException{
+		Connection conn = null;	
+		try {
+			conn = dataSource.getConnection();
+			Database.dropTable(conn, "results");
+			System.out.println("EXITING NOW");
+		}
+		catch (Exception e) {
+			System.out.println("Exit error");
+		}
+		finally {
+			if (conn != null)
+				conn.close();
+		}
+	}
+		
+	/**
+	 * Creates a HashMap of the fifty states with its abbreviations. This is used to populate the State field for user selection.
+	 * @return a HashMap of the fifty states with its abbreviations
+	 */
 	public LinkedHashMap<String, String> getListOfStates() {
 		LinkedHashMap<String, String> states = new LinkedHashMap<String, String>();
 		Connection myConn = null;

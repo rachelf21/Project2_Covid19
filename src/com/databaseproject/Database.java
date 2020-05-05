@@ -245,10 +245,12 @@ public class Database {
 	 * @param connection the connection to the current database
 	 * @param tableName  the name of the table to be created
 	 * @param columns    the column names and data types
+	 * @throws SQLException for database errors
 	 */
-	public void createTable(Connection connection, String tableName, String columns) {
+	public void createTable(Connection connection, String tableName, String columns) throws SQLException {
+		Statement stmt = null;
 		try {
-			Statement stmt = connection.createStatement();
+			stmt = connection.createStatement();
 			String sql = "DROP TABLE IF EXISTS " + tableName + ";";
 			stmt.executeUpdate(sql);
 			sql = "CREATE TABLE IF NOT EXISTS " + tableName + " AS(SELECT " + columns + " FROM covidData); ";
@@ -264,10 +266,13 @@ public class Database {
 			System.err.println("CREATE TABLE " + e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
+		finally {
+			if(stmt!=null)stmt.close();
+		}
 	}
 
 	/**
-	 * Creates a table in this database with tableName as table and columns as
+	 * Creates a table from an existing table in this database with tableName as table and columns as
 	 * specified. <br>
 	 * This method also adds an ID column as the primary key. <br>
 	 * This method also alters the column names.
@@ -276,10 +281,12 @@ public class Database {
 	 * @param importedTable the name of the table of the import with the latest data
 	 * @param newTableName  the name of the table to be created
 	 * @param columns       the column names and data types
+	 * @throws SQLException for database errors
 	 */
-	public void createTable(Connection connection, String importedTable, String newTableName, String columns) {
+	public void createTable(Connection connection, String importedTable, String newTableName, String columns) throws SQLException{
+		Statement stmt = null;
 		try {
-			Statement stmt = connection.createStatement();
+			stmt = connection.createStatement();
 			String sql = "DROP TABLE IF EXISTS " + newTableName + ";";
 			stmt.executeUpdate(sql);
 			sql = "CREATE TABLE IF NOT EXISTS " + newTableName + " AS(SELECT " + columns + " FROM " + importedTable +");";
@@ -295,6 +302,9 @@ public class Database {
 			System.err.println("CREATE TABLE " + e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
+		finally {
+			if(stmt!=null)stmt.close();
+		}
 	}
 
 	/**
@@ -302,10 +312,12 @@ public class Database {
 	 * 
 	 * @param conn the database connection
 	 * @param sql  the SQL SELECT statement
+	 * @throws SQLException for database errors
 	 */
-	public void createTableFromQuery(Connection conn, String sql) {
+	public void createTableFromQuery(Connection conn, String sql) throws SQLException{
+		Statement stmt = null;
 		try {
-			Statement stmt = conn.createStatement();
+			stmt = conn.createStatement();
 			sql = "CREATE TABLE results AS " + sql;
 			stmt.execute(sql);
 			sql = "ALTER TABLE  results  ADD COLUMN ID serial PRIMARY KEY;";
@@ -315,12 +327,18 @@ public class Database {
 		catch (SQLException e) {
 			System.err.println("createTableFromQuery " + e.getClass().getName() + ": " + e.getMessage());
 		}
+		finally {
+			if(stmt!=null) {
+				stmt.close();
+			}
+		}
 	}
 
 	/**
 	 * Creates a table in the database using the results of a query
 	 * 
 	 * @param conn the database connection
+	 * @param tableName name of table to be created
 	 * @param sql  the SQL SELECT statement
 	 */
 	public void createTableFromQuery(Connection conn, String tableName, String sql) {
@@ -424,20 +442,24 @@ public class Database {
 	 * @param tableName     the table from which to delete the rows
 	 * @param specifiedDate specifies the date from which to delete all records.
 	 *                      Records on this date are not deleted.
+	 * @throws SQLException when a database error occurs
 	 */
-	public void deleteRecordsAfter(Connection connection, String tableName, String specifiedDate) {
+	public void deleteRecordsAfter(Connection connection, String tableName, String specifiedDate) throws SQLException{
+		Statement stmt = null;
 		try {
 			String date = "\'2020-" + specifiedDate + "\'";
-			Statement stmt = connection.createStatement();
+			stmt = connection.createStatement();
 			// String sql = "DELETE FROM " + tableName + " WHERE date < \'2020-03-15\'; ";
 			String sql = "DELETE FROM " + tableName + " WHERE date > " + date + "; ";
 			stmt.executeUpdate(sql);
-			stmt.close();
 			System.out.println("Removed all data after 2020-" + specifiedDate + "\n");
 		}
 		catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
+		}
+		finally {
+			if(stmt!=null) stmt.close();
 		}
 	}
 
@@ -472,11 +494,12 @@ public class Database {
 	 * 
 	 * @param connection the connection to the database
 	 * @param state      the specific state to fetch data for
-	 * @return the results of the query formatted in an html table
+	 * @throws SQLException when a database error occurs
 	 */
-	public void selectByStateNoOutput(Connection connection, String state) {
+	public void selectByStateNoOutput(Connection connection, String state) throws SQLException{
+		Statement stmt = null;
 		try {
-			Statement stmt = connection.createStatement();
+			stmt = connection.createStatement();
 			String sql = "SELECT positive.date, positive.st, positive, hospitalizedcumulative, death FROM positive JOIN hospitalizations On positive.id = hospitalizations.id JOIN death ON positive.id = death.id WHERE positive.st ="
 					+ " \'" + state.toUpperCase() + "\' ORDER BY date asc;";
 			System.out.println("Retrieving records for state = " + state.toUpperCase());
@@ -485,6 +508,9 @@ public class Database {
 		}
 		catch (Exception e) {
 			System.err.println("selectByStateNoOutput " + e.getClass().getName() + ": " + e.getMessage());
+		}
+		finally {
+			if(stmt!=null) stmt.close();
 		}
 	}
 	

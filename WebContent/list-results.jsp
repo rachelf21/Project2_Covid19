@@ -30,12 +30,11 @@ h1, h2, h3, h4, h5, h6 {
 	text-align: center;
 	color: #1f3d3d;
 }
-
-
 </style>
 </head>
 
-<body style="font-family: Ubuntu, sans-serif; background-color: #ffffff;">
+<body
+	style="font-family: Ubuntu, sans-serif; background-color: #ffffff;">
 
 	<div id="wrapper">
 		<div id="header"></div>
@@ -53,7 +52,8 @@ h1, h2, h3, h4, h5, h6 {
 
 						<c:set var="chosen_state" value="${RESULT_LIST[0]['state']}"
 							scope="session" />
-						Covid19 Tracking in <c:out value="${chosen_state}"/>, United States
+						Covid19 Tracking in
+						<c:out value="${chosen_state}" />, United States
 						<!-- %=request.getParameter("state").toUpperCase()%-->
 					</h1>
 
@@ -63,12 +63,13 @@ h1, h2, h3, h4, h5, h6 {
 
 					<!--h1 >Selected State: ${state}</h1-->
 
-					<div class="centerF" style="border-style: solid; border-width: thin; width: 150px; border-color: rgb(200, 200, 200);">
-											<img
+					<div class="centerF"
+						style="border-style: solid; border-width: thin; width: 150px; border-color: rgb(200, 200, 200);">
+						<img
 							style="border-style: solid; border-width: thin; width: 150px; border-color: rgb(200, 200, 200);"
 							class="flag_im"
 							src="<%=request.getContextPath()%>/imagesxy/<c:out value="${fn:toLowerCase(chosen_state)}" />.png">
-	
+
 					</div>
 
 					<table class="table table-striped table-bordered text-center"
@@ -115,15 +116,25 @@ h1, h2, h3, h4, h5, h6 {
 
 						</tbody>
 					</table>
-					<input type="button" value="Reset"
-						onclick="window.location.href='start.jsp';return false;" class="">
+					
+		<div style="margin-top: 12px; height: 40px;"> 
+		<form style="float:left" action="ResultControllerServlet" method="GET">
+			<input type="hidden" name="command" value="RESET"> 
+						<input type="submit" value="Reset" class="">
+					</form>
+					
+		<form style="float:right;" action="ResultControllerServlet" method="GET">
+			<input type="hidden" name="command" value="EXIT"> 
+						<input type="submit" value="Exit" class="">
+					</form>
+					</div>
 					<p>
 				</div>
 			</div>
 		</div>
 	</div>
 </body>
-<footer style="font-size: small; "display: block;">
+<footer style="font-size: small; display:block;">
 	<h6>Created by Rachel Friedman for CISC 4800 | Project 2 | April
 		2020</h6>
 </footer>
