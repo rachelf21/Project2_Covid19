@@ -36,7 +36,8 @@ public class ResultControllerServlet extends HttpServlet {
 
 	private ResultDbUtil resultDbUtil;
 
-	@Resource(name = "jdbc/covid2") // for local tomcat server
+	//@Resource(name = "jdbc/covid2") // for local tomcat server
+	@Resource(name = "jdbc/ddgha774rb1b8u") // for heroku server
 	//@Resource(name = "jdbc/postgres") // for amazon server - switch to context-aws file and change name
 	// driverClassName="org.postgresql.ds.PGPoolingDataSource" /for amazon server
 
@@ -106,7 +107,9 @@ public class ResultControllerServlet extends HttpServlet {
 				break;
 
 			case "RESET":
-				resetIndex(request, response);
+				createStates(request, response);
+				downloadData(request, response);
+				//resetIndex(request, response);  //have to redownload the data because deleting tables due to limited row space on heroku
 				break;
 
 			case "EXIT":
@@ -337,6 +340,10 @@ public class ResultControllerServlet extends HttpServlet {
 			db.selectByStateNoOutput(conn, state);
 			db.deleteOldRecords(conn, "results", mmddB);
 			db.deleteRecordsAfter(conn, "results", mmddA);
+			Database.dropTable(conn, "positive");
+			Database.dropTable(conn, "hospitalizations");
+			Database.dropTable(conn, "death");
+			Database.dropTable(conn, "coviddata3");
 			listResults(request, response);
 		}
 		catch (Exception e) {

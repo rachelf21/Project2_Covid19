@@ -1,0 +1,12 @@
+<Context>
+
+  <Resource name="jdbc/covid2" 
+  			auth="Container" type="javax.sql.DataSource"
+               maxTotal="20" maxIdle="5" maxWaitMillis="10000"
+               username="rf" password="rf" 
+               driverClassName="org.postgresql.Driver"
+               url="jdbc:postgresql://localhost:5432/covid2"/>
+               
+<!--Context path = "/Covid19" aliases = "/images=C:\Users\Rachel\eclipse-workspace\Covid19\WebContent\images"/-->
+
+</Context>

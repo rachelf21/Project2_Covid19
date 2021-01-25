@@ -277,7 +277,11 @@ public class ResultDbUtil {
 		try {
 			conn = dataSource.getConnection();
 			Database.dropTable(conn, "results");
-			System.out.println("EXITING NOW");
+			Database.dropTable(conn, "positive");
+			Database.dropTable(conn, "hospitalizations");
+			Database.dropTable(conn, "death");
+			Database.dropTable(conn, "coviddata3");
+			System.out.println("DELETING ALL TABLES. EXITING NOW");
 		}
 		catch (Exception e) {
 			System.out.println("Exit error");
