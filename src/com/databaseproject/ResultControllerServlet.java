@@ -36,8 +36,8 @@ public class ResultControllerServlet extends HttpServlet {
 
 	private ResultDbUtil resultDbUtil;
 
-	//@Resource(name = "jdbc/covid2") // for local tomcat server
-	@Resource(name = "jdbc/postgres") // for amazon server
+	@Resource(name = "jdbc/covid2") // for local tomcat server
+	//@Resource(name = "jdbc/postgres") // for amazon server - switch to context-aws file and change name
 	// driverClassName="org.postgresql.ds.PGPoolingDataSource" /for amazon server
 
 	private DataSource dataSource;
@@ -177,6 +177,7 @@ public class ResultControllerServlet extends HttpServlet {
 		String filename = path + "data.csv";
 		System.out.println("filename = " + filename);
 		String columns = ws.saveToFile(filename, content);
+		System.out.println(columns);
 		Connection conn = null;
 		PGConnection pgConnection = null;
 
@@ -324,9 +325,7 @@ public class ResultControllerServlet extends HttpServlet {
 	 */
 	private void createTable2(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String mmddB = request.getParameter("start_date");
-		mmddB = mmddB.substring(5);
 		String mmddA = request.getParameter("end_date");
-		mmddA = mmddA.substring(5);
 		Database db = new Database();
 
 		Connection conn = null;

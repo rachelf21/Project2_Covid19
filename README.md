@@ -13,4 +13,4 @@ Server: Apache Tomcat version 9.5 on local machine, version 8.5 on AWS.
 **Version Control**: Git
 
 [Click here to launch the Covid19 Tracker app.](http://covid19-4800.us-east-2.elasticbeanstalk.com/)
-[![Click here to launch](/screenshot.png)](http://covid19-4800.us-east-2.elasticbeanstalk.com/)
+![Click here to launch](/screenshot.png)](http://covid19-4800.us-east-2.elasticbeanstalk.com/)

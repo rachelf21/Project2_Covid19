@@ -97,7 +97,7 @@
 </body>
 <script>
 	let today = new Date().toISOString().substr(0, 10);
-	document.querySelector("#start").value = "2020-04-01";
+	document.querySelector("#start").value = "2020-09-01";
 	document.querySelector("#end").value = today;
 </script>
 </html>

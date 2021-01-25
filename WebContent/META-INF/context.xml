@@ -1,12 +1,12 @@
 <Context>
 
-	<Resource name="jdbc/postgres" auth="Container"
-		type="javax.sql.DataSource" maxTotal="30" maxIdle="5"
-		maxWaitMillis="10000" username="rfriedman113" password="us04web."
-		driverClassName="org.postgresql.Driver"
-		factory="org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory"
-		url="jdbc:postgresql://covid19-4800.cg0kgkxlh6h7.us-east-2.rds.amazonaws.com:5432/postgres" />
-
-	<!--Context path = "/Covid19" aliases = "/images=C:\Users\Rachel\eclipse-workspace\Covid19\WebContent\images"/ -->
+  <Resource name="jdbc/covid2" 
+  			auth="Container" type="javax.sql.DataSource"
+               maxTotal="20" maxIdle="5" maxWaitMillis="10000"
+               username="rf" password="rf" 
+               driverClassName="org.postgresql.Driver"
+               url="jdbc:postgresql://localhost:5432/covid2"/>
+               
+<!--Context path = "/Covid19" aliases = "/images=C:\Users\Rachel\eclipse-workspace\Covid19\WebContent\images"/-->
 
 </Context>

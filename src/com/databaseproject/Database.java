@@ -322,6 +322,7 @@ public class Database {
 			stmt.execute(sql);
 			sql = "ALTER TABLE  results  ADD COLUMN ID serial PRIMARY KEY;";
 			stmt.executeUpdate(sql);
+			System.out.println("Created table results");
 			stmt.close();
 		}
 		catch (SQLException e) {
@@ -421,13 +422,13 @@ public class Database {
 	 */
 	public void deleteOldRecords(Connection connection, String tableName, String specifiedDate) {
 		try {
-			String date = "\'2020-" + specifiedDate + "\'";
+			String date = "\'" + specifiedDate + "\'";
 			Statement stmt = connection.createStatement();
 			// String sql = "DELETE FROM " + tableName + " WHERE date < \'2020-03-15\'; ";
 			String sql = "DELETE FROM " + tableName + " WHERE date < " + date + "; ";
 			stmt.executeUpdate(sql);
 			stmt.close();
-			System.out.println("Removed all data prior to 2020-" + specifiedDate + "\n");
+			System.out.println("Removed all data prior to " + specifiedDate + "\n");
 		}
 		catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -447,12 +448,12 @@ public class Database {
 	public void deleteRecordsAfter(Connection connection, String tableName, String specifiedDate) throws SQLException{
 		Statement stmt = null;
 		try {
-			String date = "\'2020-" + specifiedDate + "\'";
+			String date = "\'" + specifiedDate + "\'";
 			stmt = connection.createStatement();
 			// String sql = "DELETE FROM " + tableName + " WHERE date < \'2020-03-15\'; ";
 			String sql = "DELETE FROM " + tableName + " WHERE date > " + date + "; ";
 			stmt.executeUpdate(sql);
-			System.out.println("Removed all data after 2020-" + specifiedDate + "\n");
+			System.out.println("Removed all data after " + specifiedDate + "\n");
 		}
 		catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
