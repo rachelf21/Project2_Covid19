@@ -238,7 +238,8 @@ public class ResultControllerServlet extends HttpServlet {
 			pgConnection = conn.unwrap(PGConnection.class);
 
 			ServletContext context = request.getServletContext();
-			String path = context.getRealPath("/");
+			//String path = context.getRealPath("/");
+			String path = "/app/";
 			Database db = new Database();
 			db.convertToTable(conn, "states", "id integer primary key, ST text, state text");
 			db.addRecords(pgConnection, path + "states.csv", "states");
