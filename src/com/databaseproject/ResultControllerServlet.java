@@ -178,7 +178,7 @@ public class ResultControllerServlet extends HttpServlet {
 		byte[] content = ws.retrieveDataFromWebsite(address);
 		ServletContext context = request.getServletContext();
 		//String path = context.getRealPath("/");
-		String path = "/app/";
+		String path = "/tmp/";
 		String filename = path + "data.csv";
 		System.out.println("filename = " + filename);
 		String columns = ws.saveToFile(filename, content);
@@ -239,7 +239,7 @@ public class ResultControllerServlet extends HttpServlet {
 
 			ServletContext context = request.getServletContext();
 			//String path = context.getRealPath("/");
-			String path = "/app/";
+			String path = "/tmp/";
 			Database db = new Database();
 			db.convertToTable(conn, "states", "id integer primary key, ST text, state text");
 			db.addRecords(pgConnection, path + "states.csv", "states");
@@ -279,7 +279,7 @@ public class ResultControllerServlet extends HttpServlet {
 		// String path = "C:\\Users\\Rachel\\eclipse-workspace\\Covid19\\data\\";
 		ServletContext context = request.getServletContext();
 		//String path = context.getRealPath("/");
-		String path = "/app/";
+		String path = "/tmp/";
 		//File folder = (File) getServletContext().getAttribute(ServletContext.TEMPDIR);
 		//File result = new File(folder, "filename.xml");
 		String filename = path + "data.csv";
