@@ -19,7 +19,7 @@ import java.sql.Connection;
  * by state, date, or both state and date. The results are then output as an
  * HTML document, formatted with DataTable in Bootstrap 4. Upon completion, the
  * program deletes the session's database and user. The result of the queries
- * remain saved as html files in an output folder.
+ * remain saved as html files in an output folder. 
  * 
  * @author Rachel Friedman
  * @version 2.0 This version introduces Java Servlets and JSP

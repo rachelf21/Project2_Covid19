@@ -83,9 +83,9 @@
 
 
 <div style="font-size: small; margin: auto;  width:50%; text-align:center">
-	<p >Created by Rachel Friedman for CISC 4800 | Project 2 | April
+	<p >Created by Rachel Friedman for CISC 4800 | Project 2 | April-May
 		2020</p>
-	<p>This Project incorporates the <b>CRUD</b> functionalities in a
+	<p>This project incorporates the <b>CRUD</b> functionalities in a
 		relational database.</p>
 	<p>Technologies used: Database: <b>PostgreSQL</b>, Backend: <b>Java, JSP,
 		JSTL and Servlets</b>, Frontend: <b>HTML, JS, CSS (Bootstrap)</b></p>
