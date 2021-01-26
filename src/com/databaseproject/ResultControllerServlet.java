@@ -1,5 +1,6 @@
 package com.databaseproject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -176,7 +177,8 @@ public class ResultControllerServlet extends HttpServlet {
 		WebScraper ws = new WebScraper();
 		byte[] content = ws.retrieveDataFromWebsite(address);
 		ServletContext context = request.getServletContext();
-		String path = context.getRealPath("/");
+		//String path = context.getRealPath("/");
+		String path = "/app/";
 		String filename = path + "data.csv";
 		System.out.println("filename = " + filename);
 		String columns = ws.saveToFile(filename, content);
@@ -275,7 +277,10 @@ public class ResultControllerServlet extends HttpServlet {
 		byte[] content = ws.retrieveDataFromWebsite(address);
 		// String path = "C:\\Users\\Rachel\\eclipse-workspace\\Covid19\\data\\";
 		ServletContext context = request.getServletContext();
-		String path = context.getRealPath("/");
+		//String path = context.getRealPath("/");
+		String path = "/app/";
+		//File folder = (File) getServletContext().getAttribute(ServletContext.TEMPDIR);
+		//File result = new File(folder, "filename.xml");
 		String filename = path + "data.csv";
 		System.out.println("filename = " + filename);
 		String columns = ws.saveToFile(filename, content);
