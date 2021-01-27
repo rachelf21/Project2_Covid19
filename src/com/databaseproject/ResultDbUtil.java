@@ -31,7 +31,9 @@ public class ResultDbUtil {
 	public ResultDbUtil(DataSource theDataSource) {
 		dataSource = theDataSource;
 //		try {
-//			Class.forName("jdbc:postgresql://aaww400sexm5z3ds:5432/dbName?user=rfriedman113Name&password=us04web.");
+//
+//		Class.forName("jdbc:postgresql://ec2-54-158-1-189.compute-1.amazonaws.com:5432/ddgha774rb1b8u?user=ukydkheqlvsoyq&password=d285def601ef8b0277c159f27290138b322b733e8d2484e80c709be4d9ea8fd6");
+////			Class.forName("jdbc:postgresql://aaww400sexm5z3ds:5432/dbName?user=rfriedman113Name&password=us04web.");
 //		}
 //		catch(Exception e) {
 //			System.out.println("Class.forName(className) not working!");
@@ -303,7 +305,9 @@ public class ResultDbUtil {
 		ResultSet rs = null;
 
 		try {
+			System.out.println("this is BEFORE myConn=dataSource.getConnection");
 			myConn = dataSource.getConnection();
+			System.out.println("this is AFTER myConn=dataSource.getConnection");
 			Statement stmt = myConn.createStatement();
 			String sql = "SELECT ST, state FROM states ORDER BY ST asc;";
 			rs = stmt.executeQuery(sql);
