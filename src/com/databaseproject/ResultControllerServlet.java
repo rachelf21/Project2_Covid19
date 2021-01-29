@@ -236,10 +236,16 @@ public class ResultControllerServlet extends HttpServlet {
 			conn = null;
 			stmt = null;
 			rs = null;
+			System.out.println("calling conn=dataSource.getConnection()");
 			conn = dataSource.getConnection();
+			System.out.println("called conn=dataSource.getConnection()");
+			System.out.println("calling pgConnection = conn.unwrap(PGConnection.class)");
 			pgConnection = conn.unwrap(PGConnection.class);
-
+			System.out.println("called pgConnection = conn.unwrap(PGConnection.class)");
+			
+			System.out.println("calling context = request.getServletContext()");
 			ServletContext context = request.getServletContext();
+			System.out.println("called context = request.getServletContext()");
 			//String path = context.getRealPath("/");
 			String path = "/tmp/";
 			System.out.println("Creating new database");
