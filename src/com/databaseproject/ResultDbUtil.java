@@ -25,7 +25,7 @@ public class ResultDbUtil {
 	Database db = new Database();
 	
 	/**
-	 * contructs a ResluldDbUtil object which acts as the go-between between Result and the ResultControllerServlet
+	 * constructs a ReslultDbUtil object which acts as the go-between between Result and the ResultControllerServlet
 	 * @param theDataSource is used to get a connection to the database
 	 */
 	public ResultDbUtil(DataSource theDataSource) {
@@ -324,7 +324,7 @@ public class ResultDbUtil {
 //				System.out.println("value: " + url);
 		}
 		catch (Exception e) {
-			System.err.println("hashmapping states error " + e.getClass().getName() + ": " + e.getMessage());
+			System.err.println("Error populating states in form" + e.getClass().getName() + ": " + e.getMessage());
 		}
 		close(myConn, myStmt, rs);
 		return states;

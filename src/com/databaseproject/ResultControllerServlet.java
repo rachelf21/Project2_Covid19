@@ -55,6 +55,7 @@ public class ResultControllerServlet extends HttpServlet {
 
 		try {
 			resultDbUtil = new ResultDbUtil(dataSource);
+			System.out.println("successfully created new resultDbUtil using dataSource");
 		}
 
 		catch (Exception e) {
@@ -137,6 +138,7 @@ public class ResultControllerServlet extends HttpServlet {
 	 */
 	private void resetIndex(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println("in resetIndex");
 		LinkedHashMap<String, String> states = resultDbUtil.getListOfStates();
 		request.setAttribute("STATES_ABBR_LIST", states);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
@@ -240,11 +242,19 @@ public class ResultControllerServlet extends HttpServlet {
 			ServletContext context = request.getServletContext();
 			//String path = context.getRealPath("/");
 			String path = "/tmp/";
+			System.out.println("Creating new database");
 			Database db = new Database();
+			System.out.println("Created new database");
+			System.out.println("calling db.convertToTable");			
 			db.convertToTable(conn, "states", "id integer primary key, ST text, state text");
+			System.out.println("called db.addRecords");			
+			System.out.println("calling db.addRecords");			
 			db.addRecords(pgConnection, path + "states.csv", "states");
+			System.out.println("called db.addRecords");			
+
 		}
 		finally {
+			System.out.println("in createStates");
 			LinkedHashMap<String, String> states = resultDbUtil.getListOfStates();
 			// add results to the request
 			request.setAttribute("STATES_ABBR_LIST", states);
