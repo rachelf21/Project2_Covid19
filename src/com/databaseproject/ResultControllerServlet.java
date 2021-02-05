@@ -38,8 +38,8 @@ public class ResultControllerServlet extends HttpServlet {
 	private ResultDbUtil resultDbUtil;
 
 	//@Resource(name = "jdbc/covid2") // for local tomcat server
-	@Resource(name = "jdbc/ddgha774rb1b8u") // for heroku server
-	//@Resource(name = "jdbc/postgres") // for amazon server - switch to context-aws file and change name
+	//@Resource(name = "jdbc/ddgha774rb1b8u") // for heroku server
+	@Resource(name = "jdbc/postgres") // for amazon server - switch to context-aws file and change name
 	// driverClassName="org.postgresql.ds.PGPoolingDataSource" /for amazon server
 
 	private DataSource dataSource;
