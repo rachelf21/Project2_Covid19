@@ -23,8 +23,8 @@ import javax.sql.DataSource;
 public class ResultDbUtil {
 
 	private DataSource dataSource;
+	String dbUrl = System.getenv("JDBC_DATABASE_URL");
 	Database db = new Database();
-	//System.out.println("New database created.");
 	
 	/**
 	 * constructs a ReslultDbUtil object which acts as the go-between between Result and the ResultControllerServlet
@@ -57,8 +57,8 @@ public class ResultDbUtil {
 
 		try {
 			// get connection
-			myConn = dataSource.getConnection();
-
+			//myConn = dataSource.getConnection();
+			myConn = DriverManager.getConnection(dbUrl);
 			// create sql statement
 			String sql = "SELECT * FROM results;";
 			myStmt = myConn.createStatement();
@@ -108,7 +108,8 @@ public class ResultDbUtil {
 
 		try {
 			// create sql for insert
-			myConn = dataSource.getConnection();
+			//myConn = dataSource.getConnection();
+			myConn = DriverManager.getConnection(dbUrl);
 			String sql = "INSERT INTO results " + "(date, st, positive, hospitalizedcumulative, death)"
 					+ "values(?, ?, ?, ?, ?)";
 			myStmt = myConn.prepareStatement(sql);
@@ -145,8 +146,8 @@ public class ResultDbUtil {
 
 		try {
 			// get connection to database
-			myConn = dataSource.getConnection();
-
+			//myConn = dataSource.getConnection();
+			myConn = DriverManager.getConnection(dbUrl);
 			// sql to get selected Result
 			String sql = "SELECT * FROM RESULTS WHERE id = ?";
 
@@ -193,8 +194,8 @@ public class ResultDbUtil {
 		try {
 			// convert Result to int
 			// get connection to database
-			myConn = dataSource.getConnection();
-
+			//myConn = dataSource.getConnection();
+			myConn = DriverManager.getConnection(dbUrl);
 			// create sql update statement
 			String sql = "UPDATE RESULTS SET date=?, st=?, positive=?, hospitalizedcumulative=?, death=? WHERE id = ?";
 
@@ -231,8 +232,8 @@ public class ResultDbUtil {
 		try {
 
 			// get connection to database
-			myConn = dataSource.getConnection();
-
+			//myConn = dataSource.getConnection();
+			myConn = DriverManager.getConnection(dbUrl);
 			// create sql update statement
 			String sql = "DELETE FROM RESULTS WHERE id = ?";
 
@@ -279,7 +280,9 @@ public class ResultDbUtil {
 	public void exit() throws SQLException{
 		Connection conn = null;	
 		try {
-			conn = dataSource.getConnection();
+			//conn = dataSource.getConnection();
+			conn = DriverManager.getConnection(dbUrl);
+			
 			Database.dropTable(conn, "results");
 			Database.dropTable(conn, "positive");
 			Database.dropTable(conn, "hospitalizations");
@@ -308,7 +311,7 @@ public class ResultDbUtil {
 
 		try {
 			System.out.println("this is BEFORE myConn=dataSource.getConnection");
-			String dbUrl = System.getenv("JDBC_DATABASE_URL");
+			//String dbUrl = System.getenv("JDBC_DATABASE_URL");
 			myConn = DriverManager.getConnection(dbUrl);
 			//myConn = dataSource.getConnection(); //this is where the error happens!!!!!!!
 			System.out.println("this is AFTER myConn=dataSource.getConnection");

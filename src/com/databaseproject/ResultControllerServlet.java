@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,6 +26,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.sql.DriverManager;
+
 
 import org.postgresql.PGConnection;
 
@@ -34,7 +37,7 @@ import org.postgresql.PGConnection;
 @WebServlet("/ResultControllerServlet")
 public class ResultControllerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	String dbUrl = System.getenv("JDBC_DATABASE_URL");
 	private ResultDbUtil resultDbUtil;
 
 	//@Resource(name = "jdbc/covid2") // for local tomcat server
@@ -190,7 +193,8 @@ public class ResultControllerServlet extends HttpServlet {
 
 		try {
 			Database db = new Database();
-			conn = dataSource.getConnection();
+			//conn = dataSource.getConnection();
+			conn = DriverManager.getConnection(dbUrl);
 			db.convertToTable(conn, tableWithLatestData, columns);
 			pgConnection = conn.unwrap(PGConnection.class);
 			db.addRecords(pgConnection, filename, tableWithLatestData);
@@ -237,7 +241,8 @@ public class ResultControllerServlet extends HttpServlet {
 			stmt = null;
 			rs = null;
 			System.out.println("calling conn=dataSource.getConnection()");
-			conn = dataSource.getConnection();
+			//conn = dataSource.getConnection();
+			conn = DriverManager.getConnection(dbUrl);
 			System.out.println("called conn=dataSource.getConnection()");
 			System.out.println("calling pgConnection = conn.unwrap(PGConnection.class)");
 			pgConnection = conn.unwrap(PGConnection.class);
@@ -309,7 +314,8 @@ public class ResultControllerServlet extends HttpServlet {
 		try {
 			stmt = null;
 			rs = null;
-			conn = dataSource.getConnection();
+			//conn = dataSource.getConnection();
+			conn = DriverManager.getConnection(dbUrl);
 			db.convertToTable(conn, tableWithLatestData, columns);
 			PGConnection pgConnection = conn.unwrap(PGConnection.class);
 			db.addRecords(pgConnection, filename, tableWithLatestData);
@@ -356,7 +362,8 @@ public class ResultControllerServlet extends HttpServlet {
 		Connection conn = null;
 
 		try {
-			conn = dataSource.getConnection();
+			//conn = dataSource.getConnection();
+			conn = DriverManager.getConnection(dbUrl);
 			Database.dropTable(conn, "results");
 			String state = request.getParameter("state");
 			db.selectByStateNoOutput(conn, state);
