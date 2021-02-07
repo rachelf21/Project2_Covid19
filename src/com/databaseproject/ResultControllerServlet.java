@@ -38,8 +38,8 @@ public class ResultControllerServlet extends HttpServlet {
 	private ResultDbUtil resultDbUtil;
 
 	//@Resource(name = "jdbc/covid2") // for local tomcat server
-	//@Resource(name = "jdbc/ddgha774rb1b8u") // for heroku server
-	@Resource(name = "jdbc/postgres") // for amazon server - switch to context-aws file and change name
+	@Resource(name = "jdbc/ddgha774rb1b8u") // for heroku server
+	//@Resource(name = "jdbc/postgres") // for amazon server - switch to context-aws file and change name
 	// driverClassName="org.postgresql.ds.PGPoolingDataSource" /for amazon server
 
 	private DataSource dataSource;
@@ -179,8 +179,8 @@ public class ResultControllerServlet extends HttpServlet {
 		WebScraper ws = new WebScraper();
 		byte[] content = ws.retrieveDataFromWebsite(address);
 		ServletContext context = request.getServletContext();
-		//String path = context.getRealPath("/");
-		String path = "/tmp/";
+		String path = context.getRealPath("/");
+		//String path = "/tmp/";
 		String filename = path + "data.csv";
 		System.out.println("filename = " + filename);
 		String columns = ws.saveToFile(filename, content);
@@ -246,8 +246,8 @@ public class ResultControllerServlet extends HttpServlet {
 			System.out.println("calling context = request.getServletContext()");
 			ServletContext context = request.getServletContext();
 			System.out.println("called context = request.getServletContext()");
-			//String path = context.getRealPath("/");
-			String path = "/tmp/";
+			String path = context.getRealPath("/");
+			//String path = "/tmp/";
 			System.out.println("Creating new database");
 			Database db = new Database();
 			System.out.println("Created new database");
@@ -294,8 +294,8 @@ public class ResultControllerServlet extends HttpServlet {
 		byte[] content = ws.retrieveDataFromWebsite(address);
 		// String path = "C:\\Users\\Rachel\\eclipse-workspace\\Covid19\\data\\";
 		ServletContext context = request.getServletContext();
-		//String path = context.getRealPath("/");
-		String path = "/tmp/";
+		String path = context.getRealPath("/");
+		//String path = "/tmp/";
 		//File folder = (File) getServletContext().getAttribute(ServletContext.TEMPDIR);
 		//File result = new File(folder, "filename.xml");
 		String filename = path + "data.csv";

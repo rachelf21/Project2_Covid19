@@ -1,6 +1,7 @@
 package com.databaseproject;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,6 +24,7 @@ public class ResultDbUtil {
 
 	private DataSource dataSource;
 	Database db = new Database();
+	//System.out.println("New database created.");
 	
 	/**
 	 * constructs a ReslultDbUtil object which acts as the go-between between Result and the ResultControllerServlet
@@ -306,7 +308,9 @@ public class ResultDbUtil {
 
 		try {
 			System.out.println("this is BEFORE myConn=dataSource.getConnection");
-			myConn = dataSource.getConnection();
+			String dbUrl = System.getenv("JDBC_DATABASE_URL");
+			myConn = DriverManager.getConnection(dbUrl);
+			//myConn = dataSource.getConnection(); //this is where the error happens!!!!!!!
 			System.out.println("this is AFTER myConn=dataSource.getConnection");
 			Statement stmt = myConn.createStatement();
 			String sql = "SELECT ST, state FROM states ORDER BY ST asc;";
