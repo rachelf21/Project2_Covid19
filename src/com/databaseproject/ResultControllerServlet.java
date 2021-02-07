@@ -1,3 +1,11 @@
+/*
+ * NOTE TO SELF
+ * This setup does NOT work when run from local computer. This setup works for Heroku only.
+ * To run locally, switch all instances of DriverManager.getConnection(dbUrl) to dataSource.getConnection().
+ * There are multiple instances of this in this file and in ResultDbUtil.java.
+ * The path does NOT need to be changed.
+ */
+
 package com.databaseproject;
 
 import java.io.File;
@@ -240,28 +248,17 @@ public class ResultControllerServlet extends HttpServlet {
 			conn = null;
 			stmt = null;
 			rs = null;
-			System.out.println("calling conn=dataSource.getConnection()");
 			//conn = dataSource.getConnection();
 			conn = DriverManager.getConnection(dbUrl);
-			System.out.println("called conn=dataSource.getConnection()");
-			System.out.println("calling pgConnection = conn.unwrap(PGConnection.class)");
 			pgConnection = conn.unwrap(PGConnection.class);
-			System.out.println("called pgConnection = conn.unwrap(PGConnection.class)");
 			
-			System.out.println("calling context = request.getServletContext()");
 			ServletContext context = request.getServletContext();
-			System.out.println("called context = request.getServletContext()");
 			String path = context.getRealPath("/");
 			//String path = "/tmp/";
-			System.out.println("Creating new database");
 			Database db = new Database();
-			System.out.println("Created new database");
-			System.out.println("calling db.convertToTable");			
-			db.convertToTable(conn, "states", "id integer primary key, ST text, state text");
-			System.out.println("called db.addRecords");			
-			System.out.println("calling db.addRecords");			
+			System.out.println("Created new db object");
+			db.convertToTable(conn, "states", "id integer primary key, ST text, state text");			
 			db.addRecords(pgConnection, path + "states.csv", "states");
-			System.out.println("called db.addRecords");			
 
 		}
 		finally {
@@ -413,7 +410,7 @@ public class ResultControllerServlet extends HttpServlet {
 			// read result info from form data
 			int id = Integer.parseInt(request.getParameter("resultId"));
 			String dateString = request.getParameter("date");
-			System.out.println("dateString =" + dateString);
+			//System.out.println("dateString =" + dateString);
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 			Date date = new Date();
 			try {
