@@ -96,7 +96,7 @@ public class WebScraper {
 			for (int i = 0; i < columnHeaders.size(); i++) {
 				if (i == 0 || i == 16 ||  i==21)
 					columnHeaders.set(i, columnHeaders.get(i) + " date"); //date, lastUpdateEt, dateModified, checkTimeEt,dateChecked
-				else if (i == 1 || i == 6 || i == 15 || i ==17 || i == 18 || i== 48)
+				else if (i == 1 || i == 6 || i == 15 || i == 17 ||  i == 48)
 					columnHeaders.set(i, columnHeaders.get(i) + " text"); //state, totalTestResultsSource,dataQualityGrade, hash
 				else
 					columnHeaders.set(i, columnHeaders.get(i) + " integer");
