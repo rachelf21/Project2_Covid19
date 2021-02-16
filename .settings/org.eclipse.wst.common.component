@@ -2,6 +2,8 @@
     <wb-module deploy-name="Covid19">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/annotations"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-test-sources/test-annotations"/>
         <property name="context-root" value="Covid19"/>
         <property name="java-output-path" value="/Covid19/build/classes"/>
     </wb-module>
