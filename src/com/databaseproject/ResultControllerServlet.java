@@ -57,6 +57,7 @@ public class ResultControllerServlet extends HttpServlet {
 	String address = "https://covidtracking.com/api/v1/states/daily.csv";
 	String tableWithLatestData = "coviddata3";
 
+	
 	@Override
 	public void init() throws ServletException {
 		// TODO Auto-generated method stub
