@@ -13,5 +13,7 @@ Server: Apache Tomcat version 9.5 on local machine, version 8.5 on AWS.
 **Version Control**: Git
 
 [Click here to launch the Covid19 Tracker app.](https://covid19-data-50states.herokuapp.com/start.jsp)
-![Click here to launch](/screenshot.png)](https://covid19-data-50states.herokuapp.com/start.jsp)
-Please be patient for initial page to load. This application uses a free version of hosting and therefore takes 2 minutes for the initial startup.
+
+Please note that it takes about 2 minutes for the site to initially load, since this application uses a free service.
+
+[![Click here to launch](/screenshot.png)](https://covid19-data-50states.herokuapp.com/start.jsp)
