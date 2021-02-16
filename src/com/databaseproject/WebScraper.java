@@ -94,8 +94,8 @@ public class WebScraper {
 
 			columnHeaders = getHeaderRow(filename);
 			for (int i = 0; i < columnHeaders.size(); i++) {
-				if (i == 0 || i == 16 ||  i==21)
-					columnHeaders.set(i, columnHeaders.get(i) + " date"); //date, lastUpdateEt, dateModified, checkTimeEt,dateChecked
+				if (i == 0 || i == 16 ||  i==20)
+					columnHeaders.set(i, columnHeaders.get(i) + " date"); //date, dateModified,dateChecked
 				else if (i == 1 || i == 6 || i == 15 || i == 17 ||  i == 48)
 					columnHeaders.set(i, columnHeaders.get(i) + " text"); //state, totalTestResultsSource,dataQualityGrade, hash
 				else
