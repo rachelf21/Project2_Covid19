@@ -175,6 +175,8 @@ public class ResultControllerServlet extends HttpServlet {
 	}
 
 	/**
+	 * IMPORTANT UPDATE AS OF 03/31/21: I disabled the download portion of this code since covidtracking.com is no longer updating data at their end. Instead, I am now using the last downloaded csv file as of this date.
+	 * 
 	 * Downloads the data from covidtracking.com and creates 3 tables (positive
 	 * cases, hospitalizations, deaths) based on the data. Each table includes all
 	 * states and all dates. This method is called when the user clicks on "Click to
@@ -188,15 +190,18 @@ public class ResultControllerServlet extends HttpServlet {
 	 */
 	private void downloadData(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, SQLException {
-		System.out.println("downloading data from covidtracking.com");
-		WebScraper ws = new WebScraper();
-		byte[] content = ws.retrieveDataFromWebsite(address);
+//		System.out.println("downloading data from covidtracking.com");
+//		WebScraper ws = new WebScraper();
+//		byte[] content = ws.retrieveDataFromWebsite(address);
 		ServletContext context = request.getServletContext();
 		String path = context.getRealPath("/");
 		//String path = "/tmp/";
-		String filename = path + "data.csv";
+//		String filename = path + "data.csv";
+		System.out.println("As of 3/31/21, no need to download data as covidtracking is no longer updating their records. Instead, use saved csv file from last download.");
+		String filename = path + "covidtrackingdaily.csv";
 		System.out.println("filename = " + filename);
-		String columns = ws.saveToFile(filename, content);
+//		String columns = ws.saveToFile(filename, content);
+		String columns = "date date, state text, positive integer, probableCases integer, negative integer, pending integer, totalTestResultsSource text, totalTestResults integer, hospitalizedCurrently integer, hospitalizedCumulative integer, inIcuCurrently integer, inIcuCumulative integer, onVentilatorCurrently integer, onVentilatorCumulative integer, recovered integer, lastUpdateEt text, dateModified date, checkTimeEt text, death integer, hospitalized integer, hospitalizedDischarged integer, dateChecked date, totalTestsViral integer, positiveTestsViral integer, negativeTestsViral integer, positiveCasesViral integer, deathConfirmed integer, deathProbable integer, totalTestEncountersViral integer, totalTestsPeopleViral integer, totalTestsAntibody integer, positiveTestsAntibody integer, negativeTestsAntibody integer, totalTestsPeopleAntibody integer, positiveTestsPeopleAntibody integer, negativeTestsPeopleAntibody integer, totalTestsPeopleAntigen integer, positiveTestsPeopleAntigen integer, totalTestsAntigen integer, positiveTestsAntigen integer, fips integer, positiveIncrease integer, negativeIncrease integer, total integer, totalTestResultsIncrease integer, posNeg integer, dataQualityGrade text, deathIncrease integer, hospitalizedIncrease integer, hash text, commercialScore integer, negativeRegularScore integer, negativeScore integer, positiveScore integer, score integer, grade integer";
 		System.out.println(columns);
 		Connection conn = null;
 		PGConnection pgConnection = null;

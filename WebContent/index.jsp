@@ -28,6 +28,10 @@
 				Then, if you would like to incorporate data from additional websites, 
 				you can customize the initial data by adding, deleting and editing records.
 			</p>
+			
+			<p>
+				<b>Note that as of early March 2021, data compilation is no longer taking place. However, all the data collected from March 2020 - March 2021 is still available here. </b> 
+			</p>
 		</div>
 
 		<div style="margin: auto; width: 300px">
@@ -96,7 +100,7 @@
 </body>
 <script>
 	let today = new Date().toISOString().substr(0, 10);
-	document.querySelector("#start").value = "2020-09-01";
-	document.querySelector("#end").value = today;
+	document.querySelector("#start").value = "2020-03-15";
+	document.querySelector("#end").value = "2020-05-15";
 </script>
 </html>
