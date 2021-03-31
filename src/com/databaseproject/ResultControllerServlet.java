@@ -84,12 +84,9 @@ public class ResultControllerServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			System.out.println("theCommand = ");
 			String theCommand = request.getParameter("command");
-			System.out.println("theCommand = "+theCommand);
 			if (theCommand == null) {
 				theCommand = "LIST_STATES";
-				System.out.println("theCommand = "+theCommand);
 			}
 
 			switch (theCommand) {
@@ -191,6 +188,7 @@ public class ResultControllerServlet extends HttpServlet {
 	 */
 	private void downloadData(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, SQLException {
+		System.out.println("downloading data from covidtracking.com");
 		WebScraper ws = new WebScraper();
 		byte[] content = ws.retrieveDataFromWebsite(address);
 		ServletContext context = request.getServletContext();
@@ -242,7 +240,6 @@ public class ResultControllerServlet extends HttpServlet {
 	 */
 	private void createStates(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, SQLException {
-		System.out.println("in create States");
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;

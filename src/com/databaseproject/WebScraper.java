@@ -18,7 +18,7 @@ import java.util.Scanner;
  * This class is used to retrieve data from a specified website.
  * 
  * @author Rachel Friedman
- * @version 2.0 This version introduces Java Servlets and JSP
+ * @version 2.0 This version utilizes Java Servlets and JSP
  *
  */
 public class WebScraper {
@@ -96,7 +96,7 @@ public class WebScraper {
 			for (int i = 0; i < columnHeaders.size(); i++) {
 				if (i == 0 || i == 16 ||  i==20)
 					columnHeaders.set(i, columnHeaders.get(i) + " date"); //date, dateModified,dateChecked
-				else if (i == 1 || i == 6 || i == 15 || i == 17 ||  i == 48)
+				else if (i == 1 || i == 6 || i == 15 || i == 17 ||  i ==21 || i == 48)
 					columnHeaders.set(i, columnHeaders.get(i) + " text"); //state, totalTestResultsSource,dataQualityGrade, hash
 				else
 					columnHeaders.set(i, columnHeaders.get(i) + " integer");
