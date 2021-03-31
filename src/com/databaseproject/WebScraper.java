@@ -94,10 +94,10 @@ public class WebScraper {
 
 			columnHeaders = getHeaderRow(filename);
 			for (int i = 0; i < columnHeaders.size(); i++) {
-				if (i == 0 || i == 16 ||  i==20)
+				if (i == 0 || i == 16 ||  i==21)
 					columnHeaders.set(i, columnHeaders.get(i) + " date"); //date, dateModified,dateChecked
-				else if (i == 1 || i == 6 || i == 15 || i == 17 ||  i ==21 || i == 48)
-					columnHeaders.set(i, columnHeaders.get(i) + " text"); //state, totalTestResultsSource,dataQualityGrade, hash
+				else if (i == 1 || i == 6 || i == 15 || i == 17 ||  i == 21 || i == 46 || i == 49)
+					columnHeaders.set(i, columnHeaders.get(i) + " text"); //state, totalTestResultsSource,lastUpdateEt, dataQualityGrade (now blank), hash
 				else
 					columnHeaders.set(i, columnHeaders.get(i) + " integer");
 				if (i < columnHeaders.size() - 1)
