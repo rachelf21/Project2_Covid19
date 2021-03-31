@@ -265,6 +265,7 @@ public class ResultControllerServlet extends HttpServlet {
 			System.out.println("Created new db object");
 			db.convertToTable(conn, "states", "id integer primary key, ST text, state text");			
 			db.addRecords(pgConnection, path + "states.csv", "states");
+			System.out.println("try " + path+"states.csv");
 
 		}
 		finally {
